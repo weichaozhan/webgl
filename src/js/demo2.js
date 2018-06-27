@@ -25,9 +25,9 @@ camera.position.set(0, 0, 5)
 scene.add(camera)
 
 // 创建平行光光源照射到物体上
-const light = new Three.DirectionalLight(0xffffff, 1.5)
+const light = new Three.DirectionalLight(0xfedcba, 1.5)
 
-light.position.set(0, 0, 1)
+light.position.set(0, 0, 5)
 scene.add(light)
 
 // 创建一个接受光，并带有纹理的立方体添加到场景
@@ -46,7 +46,8 @@ const geoMetry = new Three.CubeGeometry(1, 1, 1)
 cube = new Three.Mesh(geoMetry, material)
 // 设置网格在场景中的朝向
 cube.rotation.x = Math.PI / 5
-cube.rotation.y = Math.PI / 5
+cube.rotation.y = Math.PI / 12
+// console.log(camera.position.copy())
 
 scene.add(cube)
 
