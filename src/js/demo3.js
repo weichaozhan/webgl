@@ -64,6 +64,7 @@ scene.add(camera)
 
 function runAnimation() {
   renderer.clear()
+
   camera.rotation.z -= 0.01;
   renderer.render(scene, camera)
   
