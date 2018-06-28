@@ -16,6 +16,7 @@ renderer = new Three.WebGLRenderer({
   antialias: true, // 抗锯齿
 })
 renderer.setSize(container.offsetWidth, container.offsetHeight)
+renderer.setClearColor(0xffffff)
 container.appendChild(renderer.domElement)
 
 scene = new Three.Scene()
