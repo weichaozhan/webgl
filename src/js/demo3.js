@@ -61,14 +61,13 @@ for (let i = 0; i < 10; i++) {
 scene.add(light)
 scene.add(camera)
 
-renderer.clear()
-renderer.render(scene, camera)
 
-// function runAnimation() {
-//   camera.position.x = camera.position.x + 1;
-//   camera.position.y = camera.position.y + 1;
+function runAnimation() {
+  renderer.clear()
+  camera.rotation.z -= 0.01;
+  renderer.render(scene, camera)
   
-//   requestAnimationFrame(runAnimation);
-// }
+  requestAnimationFrame(runAnimation);
+}
 
-// runAnimation()
+runAnimation()
