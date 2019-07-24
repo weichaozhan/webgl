@@ -6,3 +6,4 @@ import './style/index.less'
 
 import './js/three/index.js';
 import './js/webgl/index.js';
+import './js/waveAudio/index.js';
