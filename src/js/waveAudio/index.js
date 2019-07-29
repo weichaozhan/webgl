@@ -2,6 +2,10 @@ import Audio from '../../images/audio.mp3';
 
 // 产生声音
 function productSound() {
+  // 音阶频率
+  const arrFrequency = [262, 294, 330, 349, 392, 440, 494, 523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1967];
+  // 音符
+  const arrNotes = ['·1', '·2', '·3', '·4', '·5', '·6', '·7', '1', '2', '3', '4', '5', '6', '7', '1·', '2·', '3·', '4·', '5·', '6·', '7·'];
   const audioContext= new AudioContext(); // 音频上下文
   const oscillator = audioContext.createOscillator(); // 创建 OscillatorNode 表示一个周期性波形，音调
   const gainNode = audioContext.createGain(); // 创建一个GainNode，它可以控制音频的总音量
@@ -12,21 +16,27 @@ function productSound() {
   oscillator.type = 'sine'; // 设置波形
   oscillator.frequency.value = 196; // 设置频率
   
-  gainNode.gain.setValueAtTime(0, audioContext.currentTime); // 设置当前时间音量为 0， 0 - 1
-  gainNode.gain.linearRampToValueAtTime(0.9, audioContext.currentTime + 0.01); // audioContext.currentTime + 0.01 时音量线性变化到 1 
-  
   oscillator.start(audioContext.currentTime); // 开始播放声音
-
-  // gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1); // audioContext.currentTime + 1 时音量指数变化到 0.001
   
-  let timer = setInterval(() => {
+  let index = 0;
+  let playSound = () => {
+    const timer = (Math.random() * 10).toFixed(0) * 100;
+    console.log(timer);
+    setTimeout(playSound, timer);
     oscillator.frequency.value = 500 + ((Math.random() * 100).toFixed(0) * 1);
-  }, ((Math.random() * 100).toFixed(0) * 10));
+    
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // 设置当前时间音量为 0， 0 - 1
+    gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.01); // audioContext.currentTime + 0.01 时音量线性变化到 1 
+    
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + timer/1000); // audioContext.currentTime + 1 时音量指数变化到 0.001  
+    
+    index ++;
+  }
 
-  setTimeout(() => {
-    clearInterval(timer);
-  }, 10000);
-  oscillator.stop(audioContext.currentTime + 10); // 停止播放声音
+  playSound();
+
+  
+  // oscillator.stop(audioContext.currentTime + 10); // 停止播放声音
 }
 productSound();
 
