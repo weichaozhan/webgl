@@ -27,6 +27,9 @@ function productSound() {
     const frequency = arrFrequency[tigers[index]];
 
     if (frequency === undefined) {
+      index = 0;
+      document.querySelector('#sound-created').innerHTML = '播放';
+      isPlaying = false;
       return;
     }
 
@@ -38,7 +41,7 @@ function productSound() {
     
     if (frequency) {
       gainNode.gain.setValueAtTime(0, audioContext.currentTime); // 设置当前时间音量为 0， 0 - 1
-      gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.01); // audioContext.currentTime + 0.01 时音量线性变化到 1 
+      gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.01); // audioContext.currentTime + 0.01 时音量线性变化到 1 
       gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + timer/1000); // audioContext.currentTime + 1 时音量指数变化到 0.001  
     }
     
