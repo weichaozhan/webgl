@@ -137,12 +137,12 @@ function buildAudioWave() {
       isPlaying = false;
     });
   
-    audioCtx.resume().then(() => {
-      audio.play();
-    });
+    // audioCtx.resume().then(() => {
+    //   audio.play();
+    // });
   });
 };
-// buildAudioWave();
+buildAudioWave();
 
 // 完整曲目波形
 function buildWholeWave() {
@@ -173,7 +173,7 @@ function buildWholeWave() {
           let dataArray = interleaveLeftAndRight(leftChannel, rightChannel).map(item => item * 32768/128/255).map(item => item * 255/2).filter((item, index) => !(index%2048));
           
           // // canvas
-          const waveCanvas = document.getElementById('wave-surver');
+          const waveCanvas = document.getElementById('wave-surver2');
           const canvasWidth = waveCanvas.offsetWidth;
           const canvasHeight = waveCanvas.offsetHeight;
         
@@ -206,4 +206,4 @@ function buildWholeWave() {
         });
     });
 }
-// buildWholeWave();
+buildWholeWave();
