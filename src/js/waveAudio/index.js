@@ -2,23 +2,15 @@ import Audio from '../../images/audio.mp3';
 
 // 产生声音
 function productSound() {
-  // 音阶频率
+  // 音阶频率对应音符
   const arrFrequency = {
     0: 0, '·1': 262, '·2': 294, '·3': 330, '·4': 349, '·5': 392, '·6': 440, '·7': 494, '1': 523, '2': 587, '3': 659, '4': 698, '5': 784, '6': 880, '7': 988, '1·': 1047, '2·': 1175, '3·': 1319, '4·': 1397, '5·': 1568, '6·': 1760, '7·': 1967,
   };
-  // 音符
-  const arrNotes = ['0', '·1', '·2', '·3', '·4', '·5', '·6', '·7', '1', '2', '3', '4', '5', '6', '7', '1·', '2·', '3·', '4·', '5·', '6·', '7·'];
-  const tigers = [1,2,3,1,0, 1,2,3,1,0, 3,4,5,0, 3,4,5,0, 5,6,5,4,0, 3,1,0, 5,6,5,4,0, 3,1,0, 2,'·5',0, 1,0, 2,'·5',0, 1,0,];
+  const tigers = [1,2,3,1, 1,2,3,1, 3,4,5, 3,4,5, 5,6,5,4, 3,1, 5,6,5,4, 3,1, 2,'·5', 1, 2,'·5', 1,];
   
-  const audioContext= new AudioContext(); // 音频上下文
-  const oscillator = audioContext.createOscillator(); // 创建 OscillatorNode 表示一个周期性波形，音调
-  const gainNode = audioContext.createGain(); // 创建一个GainNode，它可以控制音频的总音量
-  
-  oscillator.connect(gainNode); // 音频音量关联
-  gainNode.connect(audioContext.destination); // 关联音频设备
-  
-  oscillator.type = 'sine'; // 设置波形
-  oscillator.frequency.value = 196; // 设置频率
+  let audioContext;
+  let oscillator;
+  let gainNode;
   
   // 音乐
   let index = 0;
@@ -27,49 +19,61 @@ function productSound() {
     const frequency = arrFrequency[tigers[index]];
 
     if (frequency === undefined) {
+      oscillator.stop();
       index = 0;
-      document.querySelector('#sound-created').innerHTML = '播放';
+      audioStart = false;
       isPlaying = false;
+      document.querySelector('#sound-created').innerHTML = '播放';
       return;
     }
 
-    const timer = frequency === 0 ? 50 :  300;
+    let timer = 300;
     
     // oscillator.frequency.value = 500 + ((Math.random() * 100).toFixed(0) * 1);
+    
     oscillator.frequency.value = frequency;
-    
-    
-    if (frequency) {
-      gainNode.gain.setValueAtTime(0, audioContext.currentTime); // 设置当前时间音量为 0， 0 - 1
-      gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.01); // audioContext.currentTime + 0.01 时音量线性变化到 1 
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + timer/1000); // audioContext.currentTime + 1 时音量指数变化到 0.001  
-    }
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // 设置当前时间音量为 0， 0 - 1
+    gainNode.gain.linearRampToValueAtTime(1, audioContext.currentTime + 0.01); // audioContext.currentTime + 0.01 时音量线性变化到 1 
+    gainNode.gain.exponentialRampToValueAtTime(0.1, audioContext.currentTime + timer/1000); // audioContext.currentTime + 1 时音量指数变化到 0.001
     
     index ++;
-    timeout = setTimeout(playSound, timer);
+    timeout = setTimeout(playSound, frequency ? timer : timer);
   }
 
   // 播放控制
   let isPlaying = false;
   let audioStart = false;
+
   document.querySelector('#sound-created').addEventListener('click', (e) => {
     if (!audioStart) {
+      audioContext= new AudioContext(); // 音频上下文
+      oscillator = audioContext.createOscillator(); // 创建 OscillatorNode 表示一个周期性波形，音调
+      gainNode = audioContext.createGain(); // 创建一个GainNode，它可以控制音频的总音量
+      
+      oscillator.connect(gainNode); // 音频音量关联
+      gainNode.connect(audioContext.destination); // 关联音频设备
+      
+      oscillator.type = 'sine'; // 设置波形 sawtooth, square, sine, triangle
+      oscillator.frequency.value = 196; // 设置频率
+
       audioStart = true;
-      oscillator.start(audioContext.currentTime); // 开始播放声音
+      oscillator.start(0); // 开始播放声音
     }
 
     if (!isPlaying) {
       e.target.innerHTML = '暂停';
       isPlaying = true;
       oscillator.connect(audioContext.destination); // 播放
+      
       playSound();
     } else {
       e.target.innerHTML = '播放';
       isPlaying = false;
+      
       oscillator.disconnect(audioContext.destination); //暂停
       clearTimeout(timeout);
     }
-  })
+  });
 }
 productSound();
 
@@ -142,7 +146,7 @@ function buildAudioWave() {
     // });
   });
 };
-buildAudioWave();
+// buildAudioWave();
 
 // 完整曲目波形
 function buildWholeWave() {
@@ -206,4 +210,4 @@ function buildWholeWave() {
         });
     });
 }
-buildWholeWave();
+// buildWholeWave();
